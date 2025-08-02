@@ -230,7 +230,7 @@ export default function Home() {
         
         // Redirect after showing the message
         setTimeout(() => {
-          window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'; // Rick Roll
+          window.location.href = 'https://youtu.be/dQw4w9WgXcQ?si=Y3rTUuoOGRMEuwCN';
         }, 2000);
       }, 500);
       
