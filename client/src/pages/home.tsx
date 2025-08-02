@@ -119,6 +119,7 @@ export default function Home() {
   const [isIntervention, setIsIntervention] = useState(false);
   const [useSassyMode, setUseSassyMode] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
+  const [showVideoIntervention, setShowVideoIntervention] = useState(false);
 
   // Sound effects using Web Audio API
   const playSound = (type: 'click' | 'popup' | 'sassy' | 'intervention' | 'flash' | 'hover') => {
@@ -228,9 +229,9 @@ export default function Home() {
         setShowPopup(true);
         playSound('sassy');
         
-        // Redirect after showing the message
+        // Show video intervention instead of redirecting
         setTimeout(() => {
-          window.location.href = 'https://youtu.be/dQw4w9WgXcQ?si=Y3rTUuoOGRMEuwCN';
+          setShowVideoIntervention(true);
         }, 2000);
       }, 500);
       
@@ -500,6 +501,57 @@ export default function Home() {
             >
               {useSassyMode ? "Fine, I'll Stop... Maybe" : "You're Right, Thanks"}
             </Button>
+          </motion.div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Video Intervention Modal */}
+      <Dialog open={showVideoIntervention} onOpenChange={() => {}}>
+        <DialogContent className="bg-navy-900 border-2 border-red-500 text-white max-w-4xl rounded-2xl p-0 overflow-hidden">
+          <VisuallyHidden>
+            <DialogTitle>Video Intervention</DialogTitle>
+            <DialogDescription>This is your intervention video</DialogDescription>
+          </VisuallyHidden>
+          <motion.div
+            initial={{ scale: 0.3, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            transition={{ type: "spring", damping: 20, stiffness: 300 }}
+            className="relative"
+          >
+            <div className="bg-red-600 text-center py-4 px-6">
+              <h2 className="font-poppins font-bold text-2xl">🚨 INTERVENTION IN PROGRESS 🚨</h2>
+              <p className="text-red-100 mt-2">This is for your own good. Watch and learn.</p>
+            </div>
+            
+            <div className="relative aspect-video">
+              <iframe
+                width="100%"
+                height="100%"
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ?autoplay=1&controls=0&modestbranding=1&rel=0&showinfo=0"
+                title="Intervention Video"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="w-full h-full"
+              ></iframe>
+            </div>
+            
+            <div className="bg-navy-800 p-4 text-center">
+              <p className="text-slate-300 mb-4 font-inter">
+                You've been rickrolled as part of your intervention. Maybe next time you'll think twice before obsessing over your ex.
+              </p>
+              <Button
+                onClick={() => {
+                  setShowVideoIntervention(false);
+                  setTapCount(0);
+                  setUseSassyMode(false);
+                  setIsIntervention(false);
+                }}
+                className="bg-green-600 hover:bg-green-500 text-white font-poppins font-semibold px-8 py-3 rounded-xl"
+              >
+                I Promise to Move On
+              </Button>
+            </div>
           </motion.div>
         </DialogContent>
       </Dialog>
