@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import memeImage from "@assets/meme-image.jpeg";
 
 interface Response {
   title: string;
@@ -258,7 +259,26 @@ export default function Home() {
         setShowPopup(true);
         playSound(newTapCount >= 3 ? 'sassy' : 'popup');
       }, 300);
-    } else if (newTapCount >= 10 && newTapCount < 15) {
+    } else if (newTapCount === 10) {
+      // Special meme image response for 10th tap
+      flashScreen();
+      shakeButton();
+      setIsIntervention(true);
+      playSound('intervention');
+      setTimeout(() => {
+        setCurrentResponse({
+          title: "We need to have a serious talk...",
+          message: "", // Will show image instead
+          emoji: "🎭"
+        });
+        setShowPopup(true);
+        playSound('sassy');
+      }, 300);
+
+      setTimeout(() => {
+        setIsIntervention(false);
+      }, 3000);
+    } else if (newTapCount > 10 && newTapCount < 15) {
       // Final warning before redirect
       flashScreen();
       shakeButton();
@@ -488,9 +508,19 @@ export default function Home() {
             <h3 className="font-poppins font-bold text-2xl mb-4 text-red-400">
               {currentResponse.title}
             </h3>
-            <p className="text-slate-300 mb-6 font-inter">
-              {currentResponse.message}
-            </p>
+            {tapCount === 10 && currentResponse.message === "" ? (
+              <div className="mb-6">
+                <img 
+                  src={memeImage} 
+                  alt="Intervention Meme" 
+                  className="max-w-full h-auto rounded-lg mx-auto max-h-64 object-contain"
+                />
+              </div>
+            ) : (
+              <p className="text-slate-300 mb-6 font-inter">
+                {currentResponse.message}
+              </p>
+            )}
             <Button
               onClick={handlePopupClose}
               className={`${
