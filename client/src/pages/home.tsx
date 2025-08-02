@@ -9,6 +9,7 @@ import meme2 from "@assets/meme2.jpeg";
 import meme3 from "@assets/meme3.jpeg";
 import meme4 from "@assets/meme4.jpeg";
 import meme5 from "@assets/meme5.jpeg";
+import homepageImage from "@assets/homepage-image.jpeg";
 
 interface Response {
   title: string;
@@ -316,11 +317,10 @@ export default function Home() {
         // Pick random sassy response each time button is clicked
         const randomSassy = sassyResponses[Math.floor(Math.random() * sassyResponses.length)];
         
-        // Randomly decide whether to show a meme image (30% chance)
-        const showMeme = Math.random() < 0.3;
+        // Always show a random meme image in sassy popups
         const responseWithMeme = {
           ...randomSassy,
-          memeImage: showMeme ? memeImages[Math.floor(Math.random() * memeImages.length)] : undefined
+          memeImage: memeImages[Math.floor(Math.random() * memeImages.length)]
         };
         
         setCurrentResponse(responseWithMeme);
@@ -389,9 +389,19 @@ export default function Home() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h1 className="font-poppins font-extrabold text-4xl md:text-6xl mb-4 bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">
+          <h1 className="font-poppins font-extrabold text-4xl md:text-6xl mb-6 bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">
             Text Your Ex?
           </h1>
+          
+          {/* Homepage image above the button */}
+          <div className="mb-6">
+            <img 
+              src={homepageImage} 
+              alt="Don't text your ex" 
+              className="max-w-full h-auto rounded-lg mx-auto max-h-64 object-contain"
+            />
+          </div>
+          
           <p className="text-slate-400 text-lg md:text-xl font-inter max-w-md mx-auto">
             The app that saves you from making terrible decisions
           </p>
