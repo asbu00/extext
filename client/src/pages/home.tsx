@@ -3,6 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
+import { useQuery } from "@tanstack/react-query";
 import memeImage from "@assets/meme-image.jpeg";
 import meme1 from "@assets/meme1.jpeg";
 import meme2 from "@assets/meme2.jpeg";
@@ -140,6 +141,17 @@ export default function Home() {
   // State to track used sassy responses to avoid repetition
   const [usedSassyResponses, setUsedSassyResponses] = useState<number[]>([]);
   const [shuffledSassyResponses, setShuffledSassyResponses] = useState<Response[]>([]);
+  
+  // Check current blocking status
+  const { data: blockingStatus } = useQuery<{
+    isBlocked: boolean;
+    activePeriods: any[];
+    currentTime: string;
+    currentDay: string;
+  }>({
+    queryKey: ["/api/blocking-status"],
+    refetchInterval: 30000, // Check every 30 seconds
+  });
 
   // Sound effects using Web Audio API
   const playSound = (type: 'click' | 'popup' | 'sassy' | 'intervention' | 'flash' | 'hover') => {
@@ -256,6 +268,9 @@ export default function Home() {
     // Play click sound
     playSound('click');
 
+    // Check if we're in a blocking period for enhanced intervention
+    const isInBlockingPeriod = blockingStatus?.isBlocked || false;
+
     // Redirect to YouTube after 15 clicks
     if (newTapCount >= 15) {
       // Play special sound for redirect
@@ -283,6 +298,23 @@ export default function Home() {
     // Switch to sassy mode after 3 taps
     if (newTapCount >= 3) {
       setUseSassyMode(true);
+    }
+
+    // Enhanced intervention during blocking periods
+    if (isInBlockingPeriod && newTapCount === 1) {
+      setTimeout(() => {
+        const blockingPeriodResponse = {
+          title: "⚠️ BLOCKING PERIOD ACTIVE ⚠️",
+          message: `You're in a vulnerable time period right now (${blockingStatus?.currentTime}). This is exactly when you shouldn't text your ex. Take a deep breath and step away.`,
+          emoji: "🚨"
+        };
+        setCurrentResponse(blockingPeriodResponse);
+        setShowPopup(true);
+        playSound('intervention');
+        flashScreen();
+        shakeButton();
+      }, 200);
+      return;
     }
 
     // Different responses based on tap count
