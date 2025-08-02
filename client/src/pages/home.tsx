@@ -240,7 +240,7 @@ export default function Home() {
       setIsIntervention(true);
       playSound('intervention');
       setTimeout(() => {
-        // Pick random sassy response
+        // Pick random sassy response each time button is clicked
         const randomSassy = sassyResponses[Math.floor(Math.random() * sassyResponses.length)];
         setCurrentResponse(randomSassy);
         setShowPopup(true);
@@ -261,17 +261,7 @@ export default function Home() {
 
   const handlePopupClose = () => {
     setShowPopup(false);
-    
-    // Always show another popup when they click the button in sassy mode
-    if (tapCount >= 3 && useSassyMode) {
-      // Show a random sassy response after a small delay
-      setTimeout(() => {
-        const randomSassy = sassyResponses[Math.floor(Math.random() * sassyResponses.length)];
-        setCurrentResponse(randomSassy);
-        setShowPopup(true);
-        playSound('sassy'); // Play sassy sound for continuous popups
-      }, 800); // Slightly longer delay for dramatic effect
-    }
+    // Don't automatically show more popups - only show them when button is clicked
   };
 
   // Initialize with random quote
