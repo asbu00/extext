@@ -213,6 +213,30 @@ export default function Home() {
     // Play click sound
     playSound('click');
 
+    // Redirect to YouTube after 15 clicks
+    if (newTapCount >= 15) {
+      // Play special sound for redirect
+      playSound('intervention');
+      
+      // Show final intervention message
+      setTimeout(() => {
+        setCurrentResponse({
+          title: "OK THAT'S IT. You're getting help.",
+          message: "I'm sending you somewhere to calm down. This is for your own good.",
+          emoji: "🚨"
+        });
+        setShowPopup(true);
+        playSound('sassy');
+        
+        // Redirect after showing the message
+        setTimeout(() => {
+          window.location.href = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'; // Rick Roll
+        }, 2000);
+      }, 500);
+      
+      return; // Exit early to prevent other logic
+    }
+
     // Switch to sassy mode after 3 taps
     if (newTapCount >= 3) {
       setUseSassyMode(true);
@@ -233,6 +257,25 @@ export default function Home() {
         setShowPopup(true);
         playSound(newTapCount >= 3 ? 'sassy' : 'popup');
       }, 300);
+    } else if (newTapCount >= 10 && newTapCount < 15) {
+      // Final warning before redirect
+      flashScreen();
+      shakeButton();
+      setIsIntervention(true);
+      playSound('intervention');
+      setTimeout(() => {
+        setCurrentResponse({
+          title: `Seriously? ${newTapCount} times?!`,
+          message: `This is your ${15 - newTapCount} warning${15 - newTapCount === 1 ? '' : 's'} left before I take drastic action.`,
+          emoji: "⚠️"
+        });
+        setShowPopup(true);
+        playSound('sassy');
+      }, 300);
+
+      setTimeout(() => {
+        setIsIntervention(false);
+      }, 3000);
     } else {
       // Intervention mode with sassy responses
       flashScreen();
@@ -337,6 +380,15 @@ export default function Home() {
                   className="bg-purple-600 rounded-full px-4 py-1 text-sm font-poppins font-semibold"
                 >
                   💅 SASSY MODE ACTIVATED 💅
+                </motion.div>
+              )}
+              {tapCount >= 10 && tapCount < 15 && (
+                <motion.div
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  className="bg-red-600 border-2 border-red-400 rounded-full px-4 py-2 text-sm font-poppins font-bold animate-pulse"
+                >
+                  ⚠️ WARNING: {15 - tapCount} clicks until INTERVENTION ⚠️
                 </motion.div>
               )}
             </motion.div>
