@@ -4,11 +4,17 @@ import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 import memeImage from "@assets/meme-image.jpeg";
+import meme1 from "@assets/meme1.jpeg";
+import meme2 from "@assets/meme2.jpeg";
+import meme3 from "@assets/meme3.jpeg";
+import meme4 from "@assets/meme4.jpeg";
+import meme5 from "@assets/meme5.jpeg";
 
 interface Response {
   title: string;
   message: string;
   emoji: string;
+  memeImage?: string;
 }
 
 const responses: Response[] = [
@@ -121,6 +127,9 @@ export default function Home() {
   const [useSassyMode, setUseSassyMode] = useState(false);
   const [soundEnabled, setSoundEnabled] = useState(true);
   const [showVideoIntervention, setShowVideoIntervention] = useState(false);
+  
+  // Array of all meme images for random selection
+  const memeImages = [meme1, meme2, meme3, meme4, meme5];
 
   // Sound effects using Web Audio API
   const playSound = (type: 'click' | 'popup' | 'sassy' | 'intervention' | 'flash' | 'hover') => {
@@ -306,7 +315,15 @@ export default function Home() {
       setTimeout(() => {
         // Pick random sassy response each time button is clicked
         const randomSassy = sassyResponses[Math.floor(Math.random() * sassyResponses.length)];
-        setCurrentResponse(randomSassy);
+        
+        // Randomly decide whether to show a meme image (30% chance)
+        const showMeme = Math.random() < 0.3;
+        const responseWithMeme = {
+          ...randomSassy,
+          memeImage: showMeme ? memeImages[Math.floor(Math.random() * memeImages.length)] : undefined
+        };
+        
+        setCurrentResponse(responseWithMeme);
         setShowPopup(true);
         playSound('sassy');
       }, 300);
@@ -508,6 +525,7 @@ export default function Home() {
             <h3 className="font-poppins font-bold text-2xl mb-4 text-red-400">
               {currentResponse.title}
             </h3>
+            {/* Show special 10th tap meme */}
             {tapCount === 10 && currentResponse.message === "" ? (
               <div className="mb-6">
                 <img 
@@ -517,9 +535,22 @@ export default function Home() {
                 />
               </div>
             ) : (
-              <p className="text-slate-300 mb-6 font-inter">
-                {currentResponse.message}
-              </p>
+              <>
+                {/* Show random meme image if present */}
+                {currentResponse.memeImage && (
+                  <div className="mb-4">
+                    <img 
+                      src={currentResponse.memeImage} 
+                      alt="Random Meme" 
+                      className="max-w-full h-auto rounded-lg mx-auto max-h-48 object-contain"
+                    />
+                  </div>
+                )}
+                {/* Show message text */}
+                <p className="text-slate-300 mb-6 font-inter">
+                  {currentResponse.message}
+                </p>
+              </>
             )}
             <Button
               onClick={handlePopupClose}
