@@ -11,6 +11,10 @@ import meme3 from "@assets/meme3.jpeg";
 import meme4 from "@assets/meme4.jpeg";
 import meme5 from "@assets/meme5.jpeg";
 import homepageImage from "@assets/homepage-image.jpeg";
+import newMeme1 from "@assets/new-meme1.jpeg";
+import newMeme2 from "@assets/new-meme2.jpeg";
+import newMeme3 from "@assets/new-meme3.jpeg";
+import newMeme4 from "@assets/new-meme4.jpeg";
 
 interface Response {
   title: string;
@@ -136,7 +140,7 @@ export default function Home() {
   const [showVideoIntervention, setShowVideoIntervention] = useState(false);
   
   // Array of all meme images for random selection
-  const memeImages = [meme1, meme2, meme3, meme4, meme5];
+  const memeImages = [meme1, meme2, meme3, meme4, meme5, newMeme1, newMeme2, newMeme3, newMeme4];
   
   // State to track used sassy responses to avoid repetition
   const [usedSassyResponses, setUsedSassyResponses] = useState<number[]>([]);
@@ -417,6 +421,122 @@ export default function Home() {
     <div className="bg-navy-900 text-white font-inter min-h-screen overflow-x-hidden relative">
       {/* Background Pattern */}
       <div className="fixed inset-0 opacity-5 bg-pattern" />
+      
+      {/* Scattered decorative images */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden">
+        {/* Top left - rotated */}
+        <motion.img
+          src={newMeme1}
+          alt="decorative meme"
+          className="absolute top-8 left-8 w-24 h-24 object-cover rounded-lg opacity-60 rotate-12 shadow-lg"
+          initial={{ opacity: 0, rotate: 0, scale: 0.8 }}
+          animate={{ opacity: 0.6, rotate: 12, scale: 1 }}
+          transition={{ delay: 1, duration: 0.8 }}
+        />
+        
+        {/* Top right - tilted opposite */}
+        <motion.img
+          src={newMeme2}
+          alt="decorative meme"
+          className="absolute top-16 right-12 w-20 h-20 object-cover rounded-lg opacity-50 -rotate-15 shadow-lg"
+          initial={{ opacity: 0, rotate: 0, scale: 0.8 }}
+          animate={{ opacity: 0.5, rotate: -15, scale: 1 }}
+          transition={{ delay: 1.5, duration: 0.8 }}
+        />
+        
+        {/* Bottom left - more rotated */}
+        <motion.img
+          src={newMeme3}
+          alt="decorative meme"
+          className="absolute bottom-20 left-16 w-28 h-28 object-cover rounded-lg opacity-40 rotate-45 shadow-lg"
+          initial={{ opacity: 0, rotate: 0, scale: 0.8 }}
+          animate={{ opacity: 0.4, rotate: 45, scale: 1 }}
+          transition={{ delay: 2, duration: 0.8 }}
+        />
+        
+        {/* Bottom right - slight tilt */}
+        <motion.img
+          src={newMeme4}
+          alt="decorative meme"
+          className="absolute bottom-12 right-20 w-22 h-22 object-cover rounded-lg opacity-45 -rotate-8 shadow-lg"
+          initial={{ opacity: 0, rotate: 0, scale: 0.8 }}
+          animate={{ opacity: 0.45, rotate: -8, scale: 1 }}
+          transition={{ delay: 2.5, duration: 0.8 }}
+        />
+        
+        {/* Middle left - floating */}
+        <motion.img
+          src={newMeme1}
+          alt="decorative meme"
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 w-16 h-16 object-cover rounded-lg opacity-30 rotate-90 shadow-lg"
+          initial={{ opacity: 0, rotate: 0, x: -50 }}
+          animate={{ 
+            opacity: 0.3, 
+            rotate: 90, 
+            x: 0,
+            y: [0, -10, 0] 
+          }}
+          transition={{ 
+            delay: 3, 
+            duration: 0.8,
+            y: { repeat: Infinity, duration: 3, ease: "easeInOut" }
+          }}
+        />
+        
+        {/* Middle right - floating */}
+        <motion.img
+          src={newMeme3}
+          alt="decorative meme"
+          className="absolute right-6 top-1/3 w-18 h-18 object-cover rounded-lg opacity-35 -rotate-30 shadow-lg"
+          initial={{ opacity: 0, rotate: 0, x: 50 }}
+          animate={{ 
+            opacity: 0.35, 
+            rotate: -30, 
+            x: 0,
+            y: [0, 15, 0]
+          }}
+          transition={{ 
+            delay: 3.5, 
+            duration: 0.8,
+            y: { repeat: Infinity, duration: 4, ease: "easeInOut" }
+          }}
+        />
+        
+        {/* Additional scattered small memes */}
+        <motion.img
+          src={newMeme2}
+          alt="decorative meme"
+          className="absolute top-1/4 left-1/3 w-12 h-12 object-cover rounded-lg opacity-25 rotate-75 shadow-lg"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ 
+            opacity: 0.25, 
+            scale: 1,
+            rotate: [75, 90, 75]
+          }}
+          transition={{ 
+            delay: 4, 
+            duration: 0.8,
+            rotate: { repeat: Infinity, duration: 6, ease: "easeInOut" }
+          }}
+        />
+        
+        <motion.img
+          src={newMeme4}
+          alt="decorative meme"
+          className="absolute bottom-1/3 right-1/4 w-14 h-14 object-cover rounded-lg opacity-30 -rotate-20 shadow-lg"
+          initial={{ opacity: 0, scale: 0 }}
+          animate={{ 
+            opacity: 0.3, 
+            scale: 1,
+            x: [0, 5, 0]
+          }}
+          transition={{ 
+            delay: 4.5, 
+            duration: 0.8,
+            x: { repeat: Infinity, duration: 5, ease: "easeInOut" }
+          }}
+        />
+      </div>
 
       {/* Flash Overlay */}
       <AnimatePresence>
