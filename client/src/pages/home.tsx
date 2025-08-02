@@ -136,6 +136,10 @@ export default function Home() {
   
   // Array of all meme images for random selection
   const memeImages = [meme1, meme2, meme3, meme4, meme5];
+  
+  // State to track used sassy responses to avoid repetition
+  const [usedSassyResponses, setUsedSassyResponses] = useState<number[]>([]);
+  const [shuffledSassyResponses, setShuffledSassyResponses] = useState<Response[]>([]);
 
   // Sound effects using Web Audio API
   const playSound = (type: 'click' | 'popup' | 'sassy' | 'intervention' | 'flash' | 'hover') => {
@@ -221,6 +225,28 @@ export default function Home() {
   const showRandomQuote = () => {
     const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
     setCurrentQuote(randomQuote);
+  };
+
+  // Initialize shuffled sassy responses on first load
+  useEffect(() => {
+    const shuffled = [...sassyResponses].sort(() => Math.random() - 0.5);
+    setShuffledSassyResponses(shuffled);
+  }, []);
+
+  // Function to get next sassy response without repetition
+  const getNextSassyResponse = () => {
+    // If we've used all responses, reshuffle and reset
+    if (usedSassyResponses.length >= sassyResponses.length) {
+      const newShuffled = [...sassyResponses].sort(() => Math.random() - 0.5);
+      setShuffledSassyResponses(newShuffled);
+      setUsedSassyResponses([0]);
+      return newShuffled[0];
+    }
+    
+    // Get the next unused response
+    const nextIndex = usedSassyResponses.length;
+    setUsedSassyResponses([...usedSassyResponses, nextIndex]);
+    return shuffledSassyResponses[nextIndex] || sassyResponses[0];
   };
 
   const handleButtonClick = () => {
@@ -319,12 +345,12 @@ export default function Home() {
       setIsIntervention(true);
       playSound('intervention');
       setTimeout(() => {
-        // Pick random sassy response each time button is clicked
-        const randomSassy = sassyResponses[Math.floor(Math.random() * sassyResponses.length)];
+        // Get next sassy response without repetition
+        const nextSassy = getNextSassyResponse();
         
         // Always show a random meme image in sassy popups
         const responseWithMeme = {
-          ...randomSassy,
+          ...nextSassy,
           memeImage: memeImages[Math.floor(Math.random() * memeImages.length)]
         };
         
