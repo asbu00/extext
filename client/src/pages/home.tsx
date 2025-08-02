@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent } from "@/components/ui/dialog";
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from "@/components/ui/dialog";
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden";
 
 interface Response {
   title: string;
@@ -37,6 +38,59 @@ const responses: Response[] = [
   }
 ];
 
+const sassyResponses: Response[] = [
+  {
+    title: "Are you fr right now? 💀",
+    message: "Bestie, they left you on read for a reason. It's giving desperate energy.",
+    emoji: "💀"
+  },
+  {
+    title: "Not you being delulu again...",
+    message: "Babe, it's giving main character syndrome but you're not even in their story anymore.",
+    emoji: "🤡"
+  },
+  {
+    title: "Ma'am this is embarrassing",
+    message: "Imagine explaining to your therapist that you texted your ex... again. That's a no from me chief.",
+    emoji: "😬"
+  },
+  {
+    title: "Oop- we're still doing this?",
+    message: "Honey, your ex is probably living their best life and you're over here... like this. Red flag behavior fr.",
+    emoji: "🚩"
+  },
+  {
+    title: "Touch some grass bestie",
+    message: "I'm literally begging you to go outside and remember that grass exists. Your ex ain't it.",
+    emoji: "🌱"
+  },
+  {
+    title: "Slay queen... but backwards",
+    message: "You're literally un-slaying right now. This ain't giving what you think it's giving.",
+    emoji: "💅"
+  },
+  {
+    title: "It's giving... unhinged",
+    message: "Babes, this energy could power a small village. Channel it into literally anything else.",
+    emoji: "⚡"
+  },
+  {
+    title: "Periodt... STOP.",
+    message: "And that's on periodt. Your ex is not the main character of your story anymore. You are.",
+    emoji: "✨"
+  },
+  {
+    title: "No cap, this is cringe",
+    message: "I'm not even being dramatic - this is actually embarrassing. Your future self is cringing rn.",
+    emoji: "🧢"
+  },
+  {
+    title: "That's sus behavior",
+    message: "Very sus. Very pick-me. Very 'I have no other hobbies' energy. We don't do that here.",
+    emoji: "😒"
+  }
+];
+
 const quotes = [
   "Your ex is your ex for a reason. Don't text them, text your therapist instead.",
   "Move on, you beautiful mess. The world needs your chaos elsewhere.",
@@ -45,7 +99,14 @@ const quotes = [
   "Plot twist: Your ex is probably doing just fine without that text.",
   "The only thing worse than missing your ex is texting them about it.",
   "Your dignity called. It wants you to put the phone down.",
-  "Reminder: You're a catch, not a boomerang. Stop going back."
+  "Reminder: You're a catch, not a boomerang. Stop going back.",
+  "Bestie, they ghosted you for a reason. It's giving main character delusion.",
+  "Not you being pick-me energy right now. Your ex said what they said - nothing.",
+  "Ma'am, this is a Wendy's. Also, your ex doesn't want that text.",
+  "It's giving desperate. It's giving unhinged. It's giving... please stop.",
+  "Your ex is living rent-free in your head but you got evicted from theirs months ago.",
+  "Periodt. Your worth isn't determined by someone who couldn't see it. Next.",
+  "Touch grass. Drink water. Call your mom. Do literally anything else."
 ];
 
 export default function Home() {
@@ -56,6 +117,7 @@ export default function Home() {
   const [isShaking, setIsShaking] = useState(false);
   const [isFlashing, setIsFlashing] = useState(false);
   const [isIntervention, setIsIntervention] = useState(false);
+  const [useSassyMode, setUseSassyMode] = useState(false);
 
   const flashScreen = () => {
     setIsFlashing(true);
@@ -76,6 +138,11 @@ export default function Home() {
     const newTapCount = tapCount + 1;
     setTapCount(newTapCount);
 
+    // Switch to sassy mode after 3 taps
+    if (newTapCount >= 3) {
+      setUseSassyMode(true);
+    }
+
     // Different responses based on tap count
     if (newTapCount <= 2) {
       setCurrentResponse(responses[newTapCount - 1]);
@@ -88,12 +155,14 @@ export default function Home() {
         setShowPopup(true);
       }, 300);
     } else {
-      // Intervention mode
+      // Intervention mode with sassy responses
       flashScreen();
       shakeButton();
       setIsIntervention(true);
       setTimeout(() => {
-        setCurrentResponse(responses[4]);
+        // Pick random sassy response
+        const randomSassy = sassyResponses[Math.floor(Math.random() * sassyResponses.length)];
+        setCurrentResponse(randomSassy);
         setShowPopup(true);
       }, 300);
 
@@ -107,6 +176,20 @@ export default function Home() {
     setTimeout(() => {
       showRandomQuote();
     }, 1000);
+  };
+
+  const handlePopupClose = () => {
+    setShowPopup(false);
+    
+    // Always show another popup when they click the button in sassy mode
+    if (tapCount >= 3 && useSassyMode) {
+      // Show a random sassy response after a small delay
+      setTimeout(() => {
+        const randomSassy = sassyResponses[Math.floor(Math.random() * sassyResponses.length)];
+        setCurrentResponse(randomSassy);
+        setShowPopup(true);
+      }, 800); // Slightly longer delay for dramatic effect
+    }
   };
 
   // Initialize with random quote
@@ -157,13 +240,22 @@ export default function Home() {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.8 }}
-              className="mb-8"
+              className="mb-8 flex flex-col items-center gap-3"
             >
               <div className="bg-navy-800 rounded-full px-6 py-2 border border-slate-600">
                 <span className="text-yellow-400 font-poppins font-semibold">
                   Bad Decision Attempts: <span className="text-white">{tapCount}</span>
                 </span>
               </div>
+              {useSassyMode && (
+                <motion.div
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  className="bg-purple-600 rounded-full px-4 py-1 text-sm font-poppins font-semibold"
+                >
+                  💅 SASSY MODE ACTIVATED 💅
+                </motion.div>
+              )}
             </motion.div>
           )}
         </AnimatePresence>
@@ -243,8 +335,12 @@ export default function Home() {
       </div>
 
       {/* Popup Modal */}
-      <Dialog open={showPopup} onOpenChange={setShowPopup}>
+      <Dialog open={showPopup} onOpenChange={handlePopupClose}>
         <DialogContent className="bg-navy-800 border-2 border-red-400 text-white max-w-md rounded-2xl">
+          <VisuallyHidden>
+            <DialogTitle>{currentResponse.title}</DialogTitle>
+            <DialogDescription>{currentResponse.message}</DialogDescription>
+          </VisuallyHidden>
           <motion.div
             initial={{ scale: 0.3, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
@@ -259,10 +355,14 @@ export default function Home() {
               {currentResponse.message}
             </p>
             <Button
-              onClick={() => setShowPopup(false)}
-              className="bg-green-600 hover:bg-green-500 text-white font-poppins font-semibold px-8 py-3 rounded-xl transition-colors duration-300"
+              onClick={handlePopupClose}
+              className={`${
+                useSassyMode 
+                  ? 'bg-purple-600 hover:bg-purple-500' 
+                  : 'bg-green-600 hover:bg-green-500'
+              } text-white font-poppins font-semibold px-8 py-3 rounded-xl transition-colors duration-300`}
             >
-              You're Right, Thanks
+              {useSassyMode ? "Fine, I'll Stop... Maybe" : "You're Right, Thanks"}
             </Button>
           </motion.div>
         </DialogContent>
