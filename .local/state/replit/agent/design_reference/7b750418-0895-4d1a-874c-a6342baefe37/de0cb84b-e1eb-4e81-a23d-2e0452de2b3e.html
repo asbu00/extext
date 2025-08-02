@@ -1,0 +1,305 @@
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Your Ex? - Don't Do It!</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'poppins': ['Poppins', 'sans-serif'],
+                        'inter': ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'navy': {
+                            900: '#0F172A',
+                            800: '#1E293B',
+                            700: '#334155',
+                        }
+                    },
+                    animation: {
+                        'shake': 'shake 0.5s ease-in-out',
+                        'flash': 'flash 0.3s ease-in-out',
+                        'bounce-in': 'bounceIn 0.6s ease-out',
+                        'fade-in': 'fadeIn 0.4s ease-out',
+                        'pulse-red': 'pulseRed 2s infinite',
+                    },
+                    keyframes: {
+                        shake: {
+                            '0%, 100%': { transform: 'translateX(0)' },
+                            '10%, 30%, 50%, 70%, 90%': { transform: 'translateX(-8px)' },
+                            '20%, 40%, 60%, 80%': { transform: 'translateX(8px)' },
+                        },
+                        flash: {
+                            '0%, 100%': { backgroundColor: '#0F172A' },
+                            '50%': { backgroundColor: '#DC2626' },
+                        },
+                        bounceIn: {
+                            '0%': { transform: 'scale(0.3)', opacity: '0' },
+                            '50%': { transform: 'scale(1.05)' },
+                            '70%': { transform: 'scale(0.9)' },
+                            '100%': { transform: 'scale(1)', opacity: '1' },
+                        },
+                        fadeIn: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        pulseRed: {
+                            '0%, 100%': { boxShadow: '0 0 0 0 rgba(220, 38, 38, 0.7)' },
+                            '70%': { boxShadow: '0 0 0 20px rgba(220, 38, 38, 0)' },
+                        }
+                    }
+                }
+            }
+        };
+    </script>
+</head>
+<body class="bg-navy-900 text-white font-inter min-h-screen overflow-x-hidden">
+    <!-- Background Pattern -->
+    <div class="fixed inset-0 opacity-5">
+        <div class="absolute inset-0" style="background-image: radial-gradient(circle at 1px 1px, rgba(255,255,255,0.1) 1px, transparent 0); background-size: 40px 40px;"></div>
+    </div>
+
+    <!-- Flash Overlay -->
+    <div id="flashOverlay" class="fixed inset-0 bg-red-600 opacity-0 pointer-events-none z-50 transition-opacity duration-300"></div>
+
+    <!-- Main Container -->
+    <div class="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8">
+        
+        <!-- Header -->
+        <div class="text-center mb-12 animate-fade-in">
+            <h1 class="font-poppins font-800 text-4xl md:text-6xl mb-4 bg-gradient-to-r from-red-400 to-pink-400 bg-clip-text text-transparent">
+                Text Your Ex?
+            </h1>
+            <p class="text-slate-400 text-lg md:text-xl font-inter max-w-md mx-auto">
+                The app that saves you from making terrible decisions
+            </p>
+        </div>
+
+        <!-- Tap Counter Display -->
+        <div id="tapCounter" class="mb-8 opacity-0 transition-all duration-500">
+            <div class="bg-navy-800 rounded-full px-6 py-2 border border-slate-600">
+                <span class="text-yellow-400 font-poppins font-600">
+                    Bad Decision Attempts: <span id="counterNumber" class="text-white">0</span>
+                </span>
+            </div>
+        </div>
+
+        <!-- Main Button -->
+        <div class="relative mb-12">
+            <button id="textExButton" 
+                    class="bg-red-600 hover:bg-red-500 text-white font-poppins font-700 text-2xl md:text-3xl 
+                           px-16 py-8 md:px-24 md:py-12 rounded-full shadow-2xl 
+                           transform hover:scale-105 transition-all duration-300 
+                           animate-pulse-red focus:outline-none focus:ring-4 focus:ring-red-400 focus:ring-opacity-50
+                           active:scale-95">
+                <span class="relative z-10">TEXT MY EX</span>
+                <div class="absolute inset-0 bg-gradient-to-r from-red-500 to-red-700 rounded-full opacity-0 hover:opacity-100 transition-opacity duration-300"></div>
+            </button>
+        </div>
+
+        <!-- Motivational Quote -->
+        <div id="motivationalQuote" class="text-center max-w-lg mx-auto animate-fade-in">
+            <div class="bg-navy-800 rounded-2xl p-6 border border-slate-600 shadow-xl">
+                <div class="text-2xl mb-3">✨</div>
+                <p id="quoteText" class="text-slate-300 font-inter text-base md:text-lg italic mb-3">
+                    "Your ex is your ex for a reason. Don't text them, text your therapist instead."
+                </p>
+                <div class="text-yellow-400 font-poppins font-600 text-sm">
+                    - The Universe (probably)
+                </div>
+            </div>
+        </div>
+
+        <!-- Statistics -->
+        <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 w-full max-w-2xl animate-fade-in">
+            <div class="bg-navy-800 rounded-xl p-4 text-center border border-slate-600">
+                <div class="text-2xl font-poppins font-700 text-green-400">99.9%</div>
+                <div class="text-slate-400 text-sm">Bad Ideas Prevented</div>
+            </div>
+            <div class="bg-navy-800 rounded-xl p-4 text-center border border-slate-600">
+                <div class="text-2xl font-poppins font-700 text-blue-400">2.3M+</div>
+                <div class="text-slate-400 text-sm">Hearts Protected</div>
+            </div>
+            <div class="bg-navy-800 rounded-xl p-4 text-center border border-slate-600">
+                <div class="text-2xl font-poppins font-700 text-purple-400">0</div>
+                <div class="text-slate-400 text-sm">Regretful Texts Sent</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Popup Modal -->
+    <div id="popup" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none transition-all duration-300">
+        <div id="popupContent" class="bg-navy-800 rounded-2xl p-8 mx-4 max-w-md w-full border-2 border-red-400 shadow-2xl transform scale-75">
+            <div class="text-center">
+                <div id="popupEmoji" class="text-6xl mb-4">🛑</div>
+                <h3 id="popupTitle" class="font-poppins font-700 text-2xl mb-4 text-red-400">Seriously? Stop.</h3>
+                <p id="popupMessage" class="text-slate-300 mb-6 font-inter">
+                    This is for your own good. Your ex is probably not missing you right now.
+                </p>
+                <button id="closePopup" class="bg-green-600 hover:bg-green-500 text-white font-poppins font-600 px-8 py-3 rounded-xl transition-colors duration-300">
+                    You're Right, Thanks
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        (function() {
+            let tapCount = 0;
+            const button = document.getElementById('textExButton');
+            const popup = document.getElementById('popup');
+            const popupContent = document.getElementById('popupContent');
+            const popupTitle = document.getElementById('popupTitle');
+            const popupMessage = document.getElementById('popupMessage');
+            const popupEmoji = document.getElementById('popupEmoji');
+            const closePopup = document.getElementById('closePopup');
+            const flashOverlay = document.getElementById('flashOverlay');
+            const tapCounter = document.getElementById('tapCounter');
+            const counterNumber = document.getElementById('counterNumber');
+            const quoteText = document.getElementById('quoteText');
+
+            const responses = [
+                {
+                    title: "Seriously? Stop.",
+                    message: "This is for your own good. Your ex is probably not missing you right now.",
+                    emoji: "🛑"
+                },
+                {
+                    title: "NOPE. Not happening.",
+                    message: "Remember why you broke up? Yeah, that's still valid.",
+                    emoji: "❌"
+                },
+                {
+                    title: "Still trying?",
+                    message: "Your future self will thank you for stopping now.",
+                    emoji: "🤦‍♀️"
+                },
+                {
+                    title: "This is getting concerning...",
+                    message: "Maybe call a friend instead? Or eat some ice cream?",
+                    emoji: "😤"
+                },
+                {
+                    title: "This is an intervention.",
+                    message: "We need to talk. Put the phone down and step away slowly.",
+                    emoji: "🚨"
+                }
+            ];
+
+            const quotes = [
+                "Your ex is your ex for a reason. Don't text them, text your therapist instead.",
+                "Move on, you beautiful mess. The world needs your chaos elsewhere.",
+                "Texting your ex is like trying to put toothpaste back in the tube. Messy and pointless.",
+                "Your phone has a 'don't send' button. It's called self-respect.",
+                "Plot twist: Your ex is probably doing just fine without that text.",
+                "The only thing worse than missing your ex is texting them about it.",
+                "Your dignity called. It wants you to put the phone down.",
+                "Reminder: You're a catch, not a boomerang. Stop going back."
+            ];
+
+            function flashScreen() {
+                flashOverlay.style.opacity = '0.8';
+                setTimeout(() => {
+                    flashOverlay.style.opacity = '0';
+                }, 200);
+            }
+
+            function shakeButton() {
+                button.classList.add('animate-shake');
+                setTimeout(() => {
+                    button.classList.remove('animate-shake');
+                }, 500);
+            }
+
+            function updateCounter() {
+                counterNumber.textContent = tapCount;
+                if (tapCount > 0) {
+                    tapCounter.style.opacity = '1';
+                }
+            }
+
+            function showRandomQuote() {
+                const randomQuote = quotes[Math.floor(Math.random() * quotes.length)];
+                quoteText.textContent = `"${randomQuote}"`;
+            }
+
+            function showPopup(responseIndex) {
+                const response = responses[Math.min(responseIndex, responses.length - 1)];
+                
+                popupTitle.textContent = response.title;
+                popupMessage.textContent = response.message;
+                popupEmoji.textContent = response.emoji;
+                
+                popup.style.opacity = '1';
+                popup.style.pointerEvents = 'auto';
+                popupContent.classList.add('animate-bounce-in');
+                
+                // Auto-close after intervention message
+                if (responseIndex >= 4) {
+                    setTimeout(() => {
+                        hidePopup();
+                    }, 5000);
+                }
+            }
+
+            function hidePopup() {
+                popup.style.opacity = '0';
+                popup.style.pointerEvents = 'none';
+                popupContent.classList.remove('animate-bounce-in');
+            }
+
+            button.addEventListener('click', function() {
+                tapCount++;
+                updateCounter();
+                
+                // Different responses based on tap count
+                if (tapCount <= 2) {
+                    showPopup(tapCount - 1);
+                } else if (tapCount <= 4) {
+                    flashScreen();
+                    shakeButton();
+                    setTimeout(() => showPopup(tapCount - 1), 300);
+                } else {
+                    // Intervention mode
+                    flashScreen();
+                    shakeButton();
+                    setTimeout(() => showPopup(4), 300);
+                    
+                    // Change button text temporarily
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '<span class="relative z-10">INTERVENTION MODE!</span>';
+                    button.classList.add('bg-yellow-600', 'hover:bg-yellow-500');
+                    button.classList.remove('bg-red-600', 'hover:bg-red-500');
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('bg-yellow-600', 'hover:bg-yellow-500');
+                        button.classList.add('bg-red-600', 'hover:bg-red-500');
+                    }, 3000);
+                }
+                
+                // Show new motivational quote
+                setTimeout(() => {
+                    showRandomQuote();
+                }, 1000);
+            });
+
+            closePopup.addEventListener('click', hidePopup);
+            
+            // Close popup when clicking outside
+            popup.addEventListener('click', function(e) {
+                if (e.target === popup) {
+                    hidePopup();
+                }
+            });
+
+            // Initialize with a random quote
+            showRandomQuote();
+        })();
+    </script>
+</body>
+</html>
