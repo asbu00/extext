@@ -48,54 +48,59 @@ const responses: Response[] = [
 
 const sassyResponses: Response[] = [
   {
-    title: "Are you fr right now? 💀",
-    message: "Bestie, they left you on read for a reason. It's giving desperate energy.",
+    title: "Drama Queenin Time! 💅🏻",
+    message: "drama queenin time illa bro💅🏻",
+    emoji: "🙄"
+  },
+  {
+    title: "Ente Kutta! 😭",
+    message: "ente kutta! netflix on cheyth chill cheyyu😭🙏🏻",
+    emoji: "😭"
+  },
+  {
+    title: "She Moved On! 🥲",
+    message: "she moved on faster than your wifi daaa🥲",
+    emoji: "🥲"
+  },
+  {
+    title: "Google Maps Can't Help! 😂",
+    message: "Even google maps can't help your way back😂",
+    emoji: "😂"
+  },
+  {
+    title: "Amazon Prime Alla! 😭",
+    message: "aval/avan amazon prime allada renew cheyyan vendi😭",
     emoji: "💀"
   },
   {
-    title: "Not you being delulu again...",
-    message: "Babe, it's giving main character syndrome but you're not even in their story anymore.",
-    emoji: "🤡"
+    title: "Ex Vaccine Alla! 💉",
+    message: "ex aahnello!! vaccine alla 💉 second dose venda😭🙅🏼‍♂️",
+    emoji: "💉"
   },
   {
-    title: "Ma'am this is embarrassing",
-    message: "Imagine explaining to your therapist that you texted your ex... again. That's a no from me chief.",
-    emoji: "😬"
+    title: "Msg vs Marriage! 💍",
+    message: "nee poyi oru msg, aval poyi oru marriage💍",
+    emoji: "💍"
   },
   {
-    title: "Oop- we're still doing this?",
-    message: "Honey, your ex is probably living their best life and you're over here... like this. Red flag behavior fr.",
-    emoji: "🚩"
+    title: "Dark Mode Activated! 🌚",
+    message: "bro she shifted to dark mode when you walked in🌚",
+    emoji: "🌚"
   },
   {
-    title: "Touch some grass bestie",
-    message: "I'm literally begging you to go outside and remember that grass exists. Your ex ain't it.",
-    emoji: "🌱"
+    title: "Nirthi Valle! 🤌🏻",
+    message: "nirthi valle panikkum podeyy🤌🏻",
+    emoji: "🤌🏻"
   },
   {
-    title: "Slay queen... but backwards",
-    message: "You're literally un-slaying right now. This ain't giving what you think it's giving.",
-    emoji: "💅"
+    title: "Ammakum Venda! 🙂‍↕️",
+    message: "ammale vendaathore ammmkum venda🙂‍↕️",
+    emoji: "🙂‍↕️"
   },
   {
-    title: "It's giving... unhinged",
-    message: "Babes, this energy could power a small village. Channel it into literally anything else.",
-    emoji: "⚡"
-  },
-  {
-    title: "Periodt... STOP.",
-    message: "And that's on periodt. Your ex is not the main character of your story anymore. You are.",
-    emoji: "✨"
-  },
-  {
-    title: "No cap, this is cringe",
-    message: "I'm not even being dramatic - this is actually embarrassing. Your future self is cringing rn.",
-    emoji: "🧢"
-  },
-  {
-    title: "That's sus behavior",
-    message: "Very sus. Very pick-me. Very 'I have no other hobbies' energy. We don't do that here.",
-    emoji: "😒"
+    title: "Maveli Poley! 😭",
+    message: "avalk nee maveli poleyaanu oru thavena kandal pinne illyaa😭",
+    emoji: "😭"
   }
 ];
 
