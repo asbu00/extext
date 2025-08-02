@@ -118,8 +118,80 @@ export default function Home() {
   const [isFlashing, setIsFlashing] = useState(false);
   const [isIntervention, setIsIntervention] = useState(false);
   const [useSassyMode, setUseSassyMode] = useState(false);
+  const [soundEnabled, setSoundEnabled] = useState(true);
+
+  // Sound effects using Web Audio API
+  const playSound = (type: 'click' | 'popup' | 'sassy' | 'intervention' | 'flash' | 'hover') => {
+    if (!soundEnabled) return;
+    
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    const gainNode = audioContext.createGain();
+
+    oscillator.connect(gainNode);
+    gainNode.connect(audioContext.destination);
+
+    switch (type) {
+      case 'click':
+        // Satisfying button click sound
+        oscillator.frequency.setValueAtTime(800, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(200, audioContext.currentTime + 0.1);
+        gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        oscillator.type = 'square';
+        break;
+      case 'popup':
+        // Pop sound for dialog
+        oscillator.frequency.setValueAtTime(600, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(300, audioContext.currentTime + 0.15);
+        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+        oscillator.type = 'sine';
+        break;
+      case 'sassy':
+        // Sassy "tsk tsk" sound
+        oscillator.frequency.setValueAtTime(400, audioContext.currentTime);
+        oscillator.frequency.setValueAtTime(600, audioContext.currentTime + 0.05);
+        oscillator.frequency.setValueAtTime(300, audioContext.currentTime + 0.1);
+        gainNode.gain.setValueAtTime(0.25, audioContext.currentTime);
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime + 0.05);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+        oscillator.type = 'triangle';
+        break;
+      case 'intervention':
+        // Alert/warning sound
+        oscillator.frequency.setValueAtTime(1000, audioContext.currentTime);
+        oscillator.frequency.setValueAtTime(800, audioContext.currentTime + 0.1);
+        oscillator.frequency.setValueAtTime(1000, audioContext.currentTime + 0.2);
+        gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+        gainNode.gain.setValueAtTime(0.2, audioContext.currentTime + 0.1);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+        oscillator.type = 'sawtooth';
+        break;
+      case 'flash':
+        // Quick zap sound for screen flash
+        oscillator.frequency.setValueAtTime(2000, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.05);
+        gainNode.gain.setValueAtTime(0.15, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.05);
+        oscillator.type = 'square';
+        break;
+      case 'hover':
+        // Subtle hover sound
+        oscillator.frequency.setValueAtTime(500, audioContext.currentTime);
+        oscillator.frequency.exponentialRampToValueAtTime(400, audioContext.currentTime + 0.1);
+        gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+        oscillator.type = 'sine';
+        break;
+    }
+
+    oscillator.start(audioContext.currentTime);
+    oscillator.stop(audioContext.currentTime + 0.3);
+  };
 
   const flashScreen = () => {
+    playSound('flash');
     setIsFlashing(true);
     setTimeout(() => setIsFlashing(false), 300);
   };
@@ -138,6 +210,9 @@ export default function Home() {
     const newTapCount = tapCount + 1;
     setTapCount(newTapCount);
 
+    // Play click sound
+    playSound('click');
+
     // Switch to sassy mode after 3 taps
     if (newTapCount >= 3) {
       setUseSassyMode(true);
@@ -145,25 +220,31 @@ export default function Home() {
 
     // Different responses based on tap count
     if (newTapCount <= 2) {
-      setCurrentResponse(responses[newTapCount - 1]);
-      setShowPopup(true);
+      setTimeout(() => {
+        setCurrentResponse(responses[newTapCount - 1]);
+        setShowPopup(true);
+        playSound('popup');
+      }, 200);
     } else if (newTapCount <= 4) {
       flashScreen();
       shakeButton();
       setTimeout(() => {
         setCurrentResponse(responses[newTapCount - 1]);
         setShowPopup(true);
+        playSound(newTapCount >= 3 ? 'sassy' : 'popup');
       }, 300);
     } else {
       // Intervention mode with sassy responses
       flashScreen();
       shakeButton();
       setIsIntervention(true);
+      playSound('intervention');
       setTimeout(() => {
         // Pick random sassy response
         const randomSassy = sassyResponses[Math.floor(Math.random() * sassyResponses.length)];
         setCurrentResponse(randomSassy);
         setShowPopup(true);
+        playSound('sassy');
       }, 300);
 
       // Reset intervention mode after 3 seconds
@@ -188,6 +269,7 @@ export default function Home() {
         const randomSassy = sassyResponses[Math.floor(Math.random() * sassyResponses.length)];
         setCurrentResponse(randomSassy);
         setShowPopup(true);
+        playSound('sassy'); // Play sassy sound for continuous popups
       }, 800); // Slightly longer delay for dramatic effect
     }
   };
@@ -218,6 +300,17 @@ export default function Home() {
       {/* Main Container */}
       <div className="relative z-10 flex flex-col items-center justify-center min-h-screen px-4 py-8">
         
+        {/* Sound Toggle Button */}
+        <div className="absolute top-4 right-4">
+          <Button
+            onClick={() => setSoundEnabled(!soundEnabled)}
+            onMouseEnter={() => playSound('hover')}
+            className="bg-navy-700 hover:bg-navy-600 text-white rounded-full p-3 text-sm"
+          >
+            {soundEnabled ? '🔊' : '🔇'}
+          </Button>
+        </div>
+
         {/* Header */}
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
@@ -268,6 +361,7 @@ export default function Home() {
           >
             <Button
               onClick={handleButtonClick}
+              onMouseEnter={() => playSound('hover')}
               className={`
                 ${isIntervention 
                   ? 'bg-yellow-600 hover:bg-yellow-500' 
